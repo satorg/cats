@@ -14,16 +14,17 @@ _WARNING_: this page is written manually, and not automatically generated, so ma
 
 ### Functor
 
-| Type          | Method Name  |
-| ------------- |--------------|
-| `F[A] => F[Unit]`  | `void`   |
-| `F[A] => B => F[B]`  | `as`   |
-| `F[A] => (A => B) => F[B]` | `map`   |
-| `F[A] => (A => B) => F[(A,B)]` | `fproduct`   |
-| `F[A] => (A => B) => F[(B,A)]` | `fproductLeft`   |
-| `F[A] => B => F[(B, A)]`  | `tupleLeft`  |
-| `F[A] => B => F[(A, B)]`  | `tupleRight` |
-| `(A => B) => (F[A] => F[B])` | `lift`   |
+| Type                           | Method Name    | Notes |
+|--------------------------------|----------------|-------|
+| `F[A] => F[Unit]`              | `void`         |
+| `F[A] => B => F[B]`            | `as`           |
+| `F[A] => (A => B) => F[B]`     | `map`          |
+| `F[A] => (A => A1) => F[A1])`  | `mapOrKeep`    | A1 >: A, the (A => A1) is a PartialFunction
+| `F[A] => (A => B) => F[(A,B)]` | `fproduct`     |
+| `F[A] => (A => B) => F[(B,A)]` | `fproductLeft` |
+| `F[A] => B => F[(B, A)]`       | `tupleLeft`    |
+| `F[A] => B => F[(A, B)]`       | `tupleRight`   |
+| `(A => B) => (F[A] => F[B])`   | `lift`         |
 
 ### Apply
 
@@ -206,7 +207,7 @@ For convenience, in these types we use the symbol `OT` to abbreviate `OptionT`.
 | `OT[F, A] => (A => Option[B]) => OT[F, B]` | `mapFilter` | `F: Functor`
 | `OT[F, A] => B => (A => B) => F[B]` | `fold` or `cata`
 | `OT[F, A] => (A => OT[F, B]) => OT[F,B]` | `flatMap`
-| `OT[F, A] => (A => F[Option[B]]) => F[B]` | `flatMapF`  | `F: Monad` |
+| `OT[F, A] => (A => F[Option[B]]) => OT[F,B]` | `flatMapF`  | `F: Monad` |
 | `OT[F, A] => A => F[A]` | `getOrElse` | `F: Functor`  |
 | `OT[F, A] => F[A] => F[A]` | `getOrElseF` | `F: Monad`  |
 | `OT[F, A] => OT[F, A] => OT[F, A]` |
@@ -283,7 +284,7 @@ Here, we use `Ki` as a short-hand for `Kleisli`.
 | `F[A, B] => F[C, A] => F[C, B]` | `compose` | `<<<` |
 | `F[A, B] => F[B, C] => F[A, C]` | `andThen` | `>>>` |
 | `=> F[A,A]` | `id`  |
-| `F[A, B] => F[C, B] => F[Either[A, C], B]` | `choice` | `|||`
+| `F[A, B] => F[C, B] => F[Either[A, C], B]` | `choice` | `|||` |
 | `=> F[ Either[A, A], A]` | `codiagonal` |
 
 #### Arrow
